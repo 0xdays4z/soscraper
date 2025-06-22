@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>soscraper</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-width: 380px;
+      margin: 0;
+      background: #181818;
+      color: #fff;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px 0 16px;
+    }
+    #copy {
+      background: #2ecc40;
+      color: #fff;
+      border: none;
+      padding: 4px 14px;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    #copy:hover { background: #27ae60; }
+    #delete {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 4px 14px;
+      font-size: 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    #delete:hover { background: #c0392b; }
+    .output-box {
+      background: #232323;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      margin: 16px;
+      padding: 16px;
+      min-height: 180px;
+      max-height: 340px;
+      overflow-y: auto;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+    }
+    th, td {
+      padding: 4px 4px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90px;
+    }
+    th {
+      font-size: 14px;
+      color: #aaa;
+      font-weight: 600;
+      border-bottom: 1px solid #333;
+      background: #232323;
+    }
+    .icon {
+      width: 28px;
+      height: 28px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 6px 2px #fff8, 0 2px 8px #0006;
+      background: #fff;
+      object-fit: cover;
+    }
+    .username {
+      color: #e74c3c;
+      font-weight: 600;
+      cursor: pointer;
+      max-width: 80px;
+    }
+    .username:hover {
+      text-decoration: underline;
+    }
+    .source-url {
+      color: #27ae60;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: 500;
+      white-space: nowrap;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: #181818;
+      cursor: pointer;
+    }
+    .no-data {
+      color: #aaa;
+      text-align: center;
+      padding: 30px 0 10px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <button id="copy">Copy</button>
+    <button id="delete">Delete</button>
+  </div>
+  <div class="output-box">
+    <table id="results-table">
+      <!-- Results will be injected here -->
+    </table>
+    <div id="no-data" class="no-data" style="display:none;">No data yet.</div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 
