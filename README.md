@@ -20,7 +20,7 @@ A simple Chrome extension for bug bounty to automate broken link hijacking soscr
 1. **Clone or download** this repository to your computer.
 2. Open Chrome and go to `chrome://extensions/`.
 3. Enable **Developer mode** (top right).
-4. Click **Load unpacked** and select the `soscrapper` folder.
+4. Click **Load unpacked** and select the `soscraper` folder.
 
 ---
 
