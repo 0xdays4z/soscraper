@@ -1,4 +1,4 @@
-# <img src="icons/icon16.png" alt="soscrapper logo" width="30" style="vertical-align:middle;"> soscrapper
+# <img src="icons/icon16.png" alt="soscrapper logo" width="30" style="vertical-align:middle;"><h1> soscrapper</h1>
 
 A simple Chrome extension for bug bounty to automate broken link hijacking soscrapper scrapes social media handles from visited website's source code in background and shows them in a modern, copy-friendly popup.
 
