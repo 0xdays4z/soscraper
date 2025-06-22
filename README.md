@@ -30,7 +30,7 @@ A simple Chrome extension for bug bounty to automate broken link hijacking soscr
 ---
 
 ## Screenshots
-> ![Popup Example](media/screenshot.png)
+ ![Popup Example](media/ss3.jpg)
 
 
 ---
