@@ -16,6 +16,10 @@ A simple Chrome extension for bug bounty to automate broken link hijacking soscr
 
 ---
 
+## Chrome Extension Download 
+
+https://chromewebstore.google.com/detail/soscraper/ibclgidogbomaeiaendoenflhlolklmi?authuser=0&hl=en
+
 ## Installation
 1. **Clone or download** this repository to your computer.
 2. Open Chrome and go to `chrome://extensions/`.
