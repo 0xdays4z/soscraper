@@ -1,40 +1,47 @@
-const SOCIAL_PATTERNS = [
-  {name: 'facebook', re: /facebook\.com\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'twitter', re: /twitter\.com\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'instagram', re: /instagram\.com\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'linkedin-in', re: /linkedin\.com\/in\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'linkedin-company', re: /linkedin\.com\/company\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'youtube', re: /youtube\.com\/@[a-zA-Z0-9_\-]{1,30}/g},
-  {name: 'tme', re: /t\.me\/[a-zA-Z0-9_@-]{1,30}/g},
-  {name: 'github', re: /github\.com\/[a-zA-Z0-9_@-]{1,30}/g}
-];
+console.log("soscraper v2.2: Background service worker started.");
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete' && tab.url && /^https?:\/\//.test(tab.url)) {
-    const sourceUrl = tab.url;
-    chrome.scripting.executeScript({
-      target: {tabId},
-      func: () => document.documentElement.outerHTML
-    }, (results) => {
-      if (!results || !results[0] || !results[0].result) return;
-      const html = results[0].result;
-      let found = [];
-      for (const {re} of SOCIAL_PATTERNS) {
-        let matches = html.match(re) || [];
-        for (const handle of matches) {
-          found.push({ handle, sourceUrl });
-        }
-      }
-      chrome.storage.local.get({socials: []}, (data) => {
-        const socials = Array.isArray(data.socials) ? data.socials : [];
-        for (const item of found) {
-          if (!socials.some(s => s.handle === item.handle && s.sourceUrl === item.sourceUrl)) {
-            socials.push(item);
-          }
-        }
-        chrome.storage.local.set({socials});
-      });
-    });
-  }
+// Use webNavigation.onCompleted for more reliable script injection
+chrome.webNavigation.onCompleted.addListener((details) => {
+    // Inject script only into the main frame of a page
+    if (details.frameId === 0 && details.url && (details.url.startsWith('http') || details.url.startsWith('https'))) {
+        console.log(`soscraper: Page loaded, injecting script into ${details.url}`);
+        chrome.scripting.executeScript({
+            target: { tabId: details.tabId },
+            files: ['scraping.js']
+        }).catch(err => console.error("soscraper: Failed to inject script:", err));
+    }
+}, {
+    url: [{ schemes: ['http', 'https'] }]
 });
 
+// Listen for messages from the content script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'SCRAPE_RESULTS' && sender.tab) {
+        const sourceUrl = sender.tab.url;
+        const foundLinks = message.links;
+
+        if (foundLinks.length > 0) {
+            console.log(`soscraper: Received ${foundLinks.length} links from ${sourceUrl}`);
+            // Retrieve existing data, update it, and save it back
+            chrome.storage.local.get('scrapedData', (result) => {
+                let data = result.scrapedData || {};
+                let updated = false;
+                foundLinks.forEach(link => {
+                    // Add link only if it's not already in the data
+                    if (!data[link]) {
+                        data[link] = sourceUrl;
+                        updated = true;
+                    }
+                });
+
+                if (updated) {
+                    chrome.storage.local.set({ scrapedData: data }, () => {
+                        console.log("soscraper: Storage updated with new links.");
+                    });
+                }
+            });
+        }
+        // Return true to indicate you wish to send a response asynchronously
+        return true;
+    }
+});
